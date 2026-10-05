@@ -14,12 +14,12 @@ np.random.seed(13)
 
 
 # 3 inputs -> 4 hidden-nevroner
-W1 = np.random.randn(3, 4)
-b1 = np.zeros((1, 4))
+Weight1 = np.random.randn(3, 4)
+bias1 = np.zeros((1, 4))
 
 # 4 hidden-nevroner -> 1 output
-W2 = np.random.randn(4, 1)
-b2 = np.zeros((1, 1))
+Weight2 = np.random.randn(4, 1)
+bias2 = np.zeros((1, 1))
 
 
 # Aktiveringsfunksjon: gjør verdiene om til tall mellom 0 og 1
@@ -35,10 +35,10 @@ learning_rate = 0.5
 for epoch in range(35000):
 
     # Forward pass
-    z1 = X @ W1 + b1
+    z1 = X @ Weight1 + bias1
     a1 = sigmoid(z1)
 
-    z2 = a1 @ W2 + b2
+    z2 = a1 @ Weight2 + bias2
     output = sigmoid(z2)
 
     # Beregn loss
@@ -48,35 +48,35 @@ for epoch in range(35000):
     d_output = 2 * (output - y) / len(y)
     d_z2 = d_output * output * (1 - output)
 
-    # Gradienter for W2 og b2
-    d_W2 = a1.T @ d_z2
-    d_b2 = np.sum(d_z2, axis=0, keepdims=True)
+    # Gradienter for Weight2 og bias2
+    d_Weight2 = a1.T @ d_z2
+    d_bias2 = np.sum(d_z2, axis=0, keepdims=True)
 
     # Send feilen bakover til hidden layer
-    d_a1 = d_z2 @ W2.T
+    d_a1 = d_z2 @ Weight2.T
     d_z1 = d_a1 * a1 * (1 - a1)
 
-    # Gradienter for W1 og b1
-    d_W1 = X.T @ d_z1
-    d_b1 = np.sum(d_z1, axis=0, keepdims=True)
+    # Gradienter for Weight1 og bias1
+    d_Weight1 = X.T @ d_z1
+    d_bias1 = np.sum(d_z1, axis=0, keepdims=True)
 
     # Oppdater vekter og bias
-    W1 -= learning_rate * d_W1
-    b1 -= learning_rate * d_b1
-    W2 -= learning_rate * d_W2
-    b2 -= learning_rate * d_b2
+    Weight1 -= learning_rate * d_Weight1
+    bias1 -= learning_rate * d_bias1
+    Weight2 -= learning_rate * d_Weight2
+    bias2 -= learning_rate * d_bias2
 
-    # Vis utviklingen hver 1000. runde
+    # Utvikling hver 1000. runde
     if epoch % 1000 == 0:
         print(f"Epoch {epoch}: loss = {loss:.4f}")
 
 
-# Vis nettverkets output
+# Nettverkets output
 print("\nFerdige prediksjoner:")
 print(output)
 
 
-# Gjør sannsynlighetene om til 0 eller 1
+# KOnverter prob om til 0 eller 1
 predictions = (output >= 0.5).astype(int)
 
 print("\nKlassifisering:")
@@ -88,7 +88,7 @@ accuracy = np.mean(predictions == y)
 print(f"\nAccuracy: {accuracy * 100:.0f}%")
 
 
-# Vis hvert input sammen med fasit og prediksjon
+# Hvert input sammen med fasit og prediksjon
 print("\nResultater:")
 
 for i in range(len(X)):
@@ -100,15 +100,15 @@ for i in range(len(X)):
     )
 
 
-# Se hva nettverket faktisk har lært
-print("\nW1:")
-print(W1)
+# Print vekter og bias
+print("\nWeight1:")
+print(Weight1)
 
-print("\nb1:")
-print(b1)
+print("\nbias1:")
+print(bias1)
 
-print("\nW2:")
-print(W2)
+print("\nWeight2:")
+print(Weight2)
 
-print("\nb2:")
-print(b2)
+print("\nbias2:")
+print(bias2)
